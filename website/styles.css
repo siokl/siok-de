@@ -12,12 +12,14 @@ h1 {
 }
 
 p {
-  background-color: red;
+  background-color: #574C36;
+  font: outline;
 }
 
 table {
-  margin: .3em;
-  width: 290px;
+  margin: 3em;
+  width: 300px;
+  align-content: center;
 }
 
 th {
@@ -27,8 +29,10 @@ th {
 td {
   padding-left: .5em;
   padding-right: .5em;
+  height: 100px;
+  width: auto;
   border: 1px solid #900;
-  background-color: #ffc;
+  background: #ffc;
 }
 
 #trHeader {

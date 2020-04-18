@@ -5,10 +5,9 @@ body {
 h1 {
   text-align: center;
   font-size: 2em;
-  color: #009;
+  font: arial;
+  color: #7af0cc;
   margin-bottom: .3em;
-  text-decoration: underline;
-  background-color: green;
 }
 
 p {
@@ -17,21 +16,16 @@ p {
 }
 
 table {
-  margin: 3em;
-  width: 300px;
+  width: 500px;
+  height: 500px;
   align-content: center;
 }
 
-th {
-  padding: .2em;
-}
 
 td {
-  padding-left: .5em;
-  padding-right: .5em;
+  border-radius: 10px;
   height: 100px;
-  width: auto;
-  border: 1px solid #900;
+  width: 100px;
   background: #ffc;
 }
 

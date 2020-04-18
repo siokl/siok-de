@@ -4,11 +4,45 @@
         <link rel="stylesheet" type="text/css" href="styles.css"/>
         <script>
             var colours = ["red","blue","green","white","orange"];
+            var tabRowNum = 2;
+            var tabColNum = 2;
+            var startTime;
+            var intervalId;
             //
-            function initFields(){
-                for(i = 0; i < 40;i++){  
-                    if(document.getElementById(i)){
-                        document.getElementById(i).style.background = colours[(i+Math.round(Math.random()*10))%colours.length];
+            function startTimer() {
+                startTime = Date.now();
+                intervalId = setInterval(function() {
+                                            var elapsedTime = Date.now() - startTime;
+                                            document.getElementById('timer').innerHTML = (elapsedTime / 1000).toFixed(1);
+                                            }, 100);
+            }
+            //
+            function stopTimer() {
+                clearInterval(intervalId);
+            }
+            //
+            function initFieldsDyn(rows, cols){
+                var vDiv;
+                var vTable;
+                var vTr;
+                var vTd;
+                vDiv = document.createElement("div");
+                vDiv.setAttribute("id", "divGame");
+                vDiv.setAttribute("align", "center");
+                document.body.appendChild(vDiv);
+                vTable = document.createElement("table");
+                vTable.setAttribute("id", "game1");
+                vTable.setAttribute("onmousedown", "changeColour(event)");
+                document.getElementById("divGame").appendChild(vTable);
+                for(i = 1; i <= rows; i++){  
+                    vTr = document.createElement("tr");
+                    vTr.setAttribute("id", "row"+i);
+                    document.getElementById("game1").appendChild(vTr);
+                    for(j = 1; j <= cols; j++){
+                        vTr = document.createElement("td");
+                        vTr.setAttribute("id", "row"+i+"col"+j);
+                        vTr.style.background = colours[(i+j+Math.round(Math.random()*10))%colours.length];
+                        document.getElementById("row"+i).appendChild(vTr);
                     }
                 }
             }
@@ -16,18 +50,20 @@
             function validateResult(){
                 var fisrstColor;
                 var allCoulorsSame = true;
-                for(i=0;i<40;i++){  
-                    if(document.getElementById(i)){
+                for(i=1;i<=tabRowNum;i++){ 
+                    for(j=1;j<=tabColNum;j++){
                         if(!fisrstColor){
-                            fisrstColor = document.getElementById(i).style.background;
+                            fisrstColor = document.getElementById("row"+i+"col"+j).style.background;
                         }
-                        if(document.getElementById(i).style.background != fisrstColor){
+                        if(document.getElementById("row"+i+"col"+j).style.background != fisrstColor){
                             allCoulorsSame = false;
+                            break;
                         }
-                    }
+                    } 
                 }
                 if(allCoulorsSame == true){
-                    //document.getElementById("game").style.visibility = "hidden";
+                    stopTimer();
+                    //document.getElementById("divGame").style.visibility = "hidden";
                     document.getElementById("result").style.visibility = "visible";
                 } else {
                     document.getElementById("result").style.visibility = "hidden";
@@ -37,6 +73,9 @@
             //
             function changeColour(e) {
                 //get and set next colour - START
+                if(!startTime){
+                    startTimer();
+                }
                 //alert(document.getElementById(e.target.id).style.background);
                 for(i=0; i<=colours.length ;i++){
                     if(colours[i] == document.getElementById(e.target.id).style.background){
@@ -49,32 +88,21 @@
                         }
                     }
                 }
-                //alert(document.getElementById(e.target.id).style.background);
                 //get and set next colour - END
-
                 // Validate result - START
                 validateResult();
                 // Validate result - END
             }
         </script>
     </head>
-    <body onload="initFields()">
-        <div id="game" align="center">
-            <table id="playground" onmousedown="changeColour(event)"> 
-                <tr>
-                    <td id="11" ></td><td id="12"></td><td id="13"></td>
-                </tr>
-                <tr>
-                    <td id="21"></td><td id="22"></td><td id="23"></td>
-                </tr>
-                <tr>
-                    <td id="31"></td><td id="32"></td><td id="33"></td>
-                </tr>
-            </table>
-        </div>
+    <body>
+        <h1 id="timer">timer starts on the first click</h1>
+        <script>
+            initFieldsDyn(tabRowNum, tabColNum);
+        </script>
         <div style="visibility: hidden;" id="result" align="center">
             <img src="img/ajax_you_did_it.jpg">
-            <p id="output"><a href="game1.html">PLAY AGAIN</a></p>
+            <h1 id="output" ><a href="game1.html">PLAY AGAIN</a></h1>
         </div>
     </body>
 </html>

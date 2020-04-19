@@ -42,9 +42,17 @@ body {
   font-family: "Dosis", sans-serif;
 }
 
-h1 {
+p {
   text-align: center;
   font-size: 2em;
+  font: arial;
+  color: #FFA200;
+  margin-bottom: .3em;
+}
+
+h1 {
+  text-align: center;
+  font-size: 1.8em;
   font: arial;
   color: #FFA200;
   margin-bottom: .3em;
@@ -56,8 +64,9 @@ div{
 }
 
 table {
-  width: 500px;
-  height: 500px;
+  width: 600px;
+  height: 600px;
+  align-self: auto;
   align-content: center;
 }
 

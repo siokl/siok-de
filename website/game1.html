@@ -4,8 +4,8 @@
         <link rel="stylesheet" type="text/css" href="styles.css"/>
         <script>
             var colours = ["red","blue","green","white","orange"];
-            var tabRowNum = 2;
-            var tabColNum = 2;
+            var tabRowNum = 3;
+            var tabColNum = 3;
             var startTime;
             var intervalId;
             //
@@ -60,6 +60,7 @@
                     for(j = 1; j <= cols; j++){
                         vTr = document.createElement("td");
                         vTr.setAttribute("id", "row"+i+"col"+j);
+                        vTr.setAttribute("style", "cursor: pointer;");
                         vTr.style.background = colours[(i+j+Math.round(Math.random()*10))%colours.length];
                         document.getElementById("row"+i).appendChild(vTr);
                     }
@@ -113,15 +114,56 @@
                 validateResult();
                 // Validate result - END
             }
+            function increaseRow(){
+                if(tabRowNum < 6){ 
+                    tabRowNum++;
+                    initFieldsDyn(tabRowNum,tabColNum);
+                    //alert(tabColNum + " - " + tabRowNum)
+                    document.getElementById('numRows').innerHTML = tabRowNum;
+                    //alert(tabColNum + " - " + tabRowNum)
+                }
+            }
+            function decreaseRow(){
+                if(tabRowNum > 2){ 
+                    tabRowNum--;
+                    initFieldsDyn(tabRowNum,tabColNum);
+                    //alert(tabColNum + " - " + tabRowNum)
+                    document.getElementById('numRows').innerHTML = tabRowNum;
+                }
+            }
+            function increaseCol(){
+                if(tabColNum < 6){ 
+                    tabColNum++;
+                    initFieldsDyn(tabRowNum,tabColNum);
+                    //alert(tabColNum + " - " + tabRowNum)
+                    document.getElementById('numCols').innerHTML = tabColNum;
+                }
+            }
+            function decreaseCol(){
+                if(tabColNum > 2){ 
+                    tabColNum--;
+                    initFieldsDyn(tabRowNum,tabColNum);
+                    //alert(tabColNum + " - " + tabRowNum)
+                    document.getElementById('numCols').innerHTML = tabColNum;
+                }
+            }
         </script>
     </head>
-    <body>
+    <body style="align-content: center;">
         <h1 id="timer">timer starts on the first click</h1>
         <div id="input" align="center">
-            <img src="img/rows.png">
-            <input type="number" id="numRows" name="numRows" min="2" max="5" onchange="initFieldsDyn(document.getElementById('numRows').value, document.getElementById('numCols').value)">
-            <img src="img/rows.png">
-            <input type="number" id="numCols" name="numCols" min="2" max="5" onchange="initFieldsDyn(document.getElementById('numRows').value, document.getElementById('numCols').value)">
+            <div style="float: left;">
+                <img src="img/cols.png">
+                <h1 id="numCols">3</h1>
+                <img src="img/plus.png" alt="plus" onclick="increaseCol()" style="cursor: pointer;">
+                <img src="img/minus.png" alt="minus" onclick="decreaseCol()" style="cursor: pointer;">
+            </div>
+            <div style="float: right;">
+                <img src="img/rows.png" style="margin-right: 10px;">
+                <h1 id="numRows">3</h1>
+                <img src="img/plus.png" alt="plus" onclick="increaseRow()" style="cursor: pointer;">
+                <img src="img/minus.png" alt="minus" onclick="decreaseRow()" style="cursor: pointer;">
+            </div>
         </div>
         <div id="game">
             <script>

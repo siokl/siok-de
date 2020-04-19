@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="styles.css"/>
+        <script>
+            var colours = ["red","blue","green","white","orange"];
+            var tabRowNum = 3;
+            var tabColNum = 3;
+            var startTime;
+            var intervalId;
+            //
+            function startTimer() {
+                startTime = Date.now();
+                intervalId = setInterval(function() {
+                                            var elapsedTime = Date.now() - startTime;
+                                            document.getElementById('timer').innerHTML = (elapsedTime / 1000).toFixed(1);
+                                            }, 100);
+            }
+            //
+            function stopTimer() {
+                clearInterval(intervalId);
+            }
+            //
+            function initFieldsDyn(rows, cols){
+                var vDiv;
+                var vTable;
+                var vTr;
+                var vTd;
+
+                if (!rows){
+                    rows = tabRowNum;
+                }else{
+                    tabRowNum = rows;
+                }
+                
+                if (!cols){
+                    cols = tabColNum;
+                }else{
+                    tabColNum = cols;
+                }
+
+                vDiv = document.getElementById("divGame");
+                if(vDiv){
+                    vDiv.remove();
+                }
+
+                vDiv = document.createElement("div");
+                vDiv.setAttribute("id", "divGame");
+                vDiv.setAttribute("align", "center");
+                //document.body.appendChild(vDiv);
+                document.getElementById("game").appendChild(vDiv);
+                vTable = document.createElement("table");
+                vTable.setAttribute("id", "tabGame");
+                vTable.setAttribute("onmousedown", "changeColour(event)");
+                document.getElementById("divGame").appendChild(vTable);
+                for(i = 1; i <= rows; i++){  
+                    vTr = document.createElement("tr");
+                    vTr.setAttribute("id", "row"+i);
+                    document.getElementById("tabGame").appendChild(vTr);
+                    for(j = 1; j <= cols; j++){
+                        vTr = document.createElement("td");
+                        vTr.setAttribute("id", "row"+i+"col"+j);
+                        vTr.setAttribute("style", "cursor: pointer;");
+                        vTr.style.background = colours[(i+j+Math.round(Math.random()*10,2))%colours.length];
+                        document.getElementById("row"+i).appendChild(vTr);
+                    }
+                }
+            }
+            //
+            function validateResult(){
+                var fisrstColor;
+                var allCoulorsSame = true;
+                for(i=1;i<=tabRowNum;i++){ 
+                    for(j=1;j<=tabColNum;j++){
+                        if(!fisrstColor){
+                            fisrstColor = document.getElementById("row"+i+"col"+j).style.background;
+                        }
+                        if(document.getElementById("row"+i+"col"+j).style.background != fisrstColor){
+                            allCoulorsSame = false;
+                            break;
+                        }
+                    } 
+                }
+                if(allCoulorsSame == true){
+                    stopTimer();
+                    startTime = undefined;
+                    //document.getElementById("divGame").style.visibility = "hidden";
+                    document.getElementById("result").style.visibility = "visible";
+                } else {
+                    document.getElementById("result").style.visibility = "hidden";
+                }
+                fisrstColor = "";
+            }
+            //
+            function changeColour(e) {
+                //get and set next colour - START
+                if(!startTime){
+                    startTimer();
+                }
+                //alert(document.getElementById(e.target.id).style.background);
+                for(i=0; i<=colours.length ;i++){
+                    if(colours[i] == document.getElementById(e.target.id).style.background){
+                        if(i<colours.length-1){
+                            document.getElementById(e.target.id).style.background = colours[i+1];
+                            break;
+                        } else{
+                            document.getElementById(e.target.id).style.background = colours[0];
+                            break;
+                        }
+                    }
+                }
+                //get and set next colour - END
+                // Validate result - START
+                validateResult();
+                // Validate result - END
+            }
+            function increaseRow(){
+                if(tabRowNum < 6){ 
+                    tabRowNum++;
+                    initFieldsDyn(tabRowNum,tabColNum);
+                    //alert(tabColNum + " - " + tabRowNum)
+                    document.getElementById('numRows').innerHTML = "rows:"+ tabRowNum;
+                    //alert(tabColNum + " - " + tabRowNum)
+                }
+            }
+            function decreaseRow(){
+                if(tabRowNum > 2){ 
+                    tabRowNum--;
+                    initFieldsDyn(tabRowNum,tabColNum);
+                    //alert(tabColNum + " - " + tabRowNum)
+                    document.getElementById('numRows').innerHTML = "rows:"+ tabRowNum;
+                }
+            }
+            function increaseCol(){
+                if(tabColNum < 6){ 
+                    tabColNum++;
+                    initFieldsDyn(tabRowNum,tabColNum);
+                    //alert(tabColNum + " - " + tabRowNum)
+                    document.getElementById('numCols').innerHTML =  "cols:"+ tabColNum;
+                }
+            }
+            function decreaseCol(){
+                if(tabColNum > 2){ 
+                    tabColNum--;
+                    initFieldsDyn(tabRowNum,tabColNum);
+                    //alert(tabColNum + " - " + tabRowNum)
+                    document.getElementById('numCols').innerHTML = "cols:"+ tabColNum;
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <table>
+            <tr>
+                <td></td>
+                <td>
+                    <div style="text-align: center;">
+                        <img src="img/plus.png" alt="plus" onclick="increaseCol()" style="cursor: pointer; align-content: center;">            
+                        <h1 id="numCols">cols:3</h1>
+                        <h1></h1>
+                        <img src="img/minus.png" alt="minus" onclick="decreaseCol()" style="cursor: pointer; align-content: center;">
+                               
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div style="float: right;">
+                        <img src="img/plus.png" alt="plus" onclick="increaseRow()" style="cursor: pointer; align-content: center;">
+                        <h1 id="numRows">rows:3</h1>
+                        <h1></h1>
+                        <img src="img/minus.png" alt="minus" onclick="decreaseRow()" style="cursor: pointer; align-content: center;">
+                    </div>
+                </td>
+                <td>
+                    <div id="game">
+                        <script>
+                            initFieldsDyn(tabRowNum, tabColNum);
+                        </script>
+                    </div>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <h1></h1>
+                    <h1 id="timer">timer starts on the first click</h1>
+                    <h1></h1>
+                    <div id="result" style="visibility: hidden; float: center; align-content: center;">
+                        <img src="img/ajax_rund.jpg" height="50px" width="50px" alt="Avatar" style="border-radius: 50%; margin-right: 10px;">
+                        <img src="img/youdidit.png" style="margin-right: 10px;">
+                        <a href="game2.html"><img src="img/playagain.png" style="cursor: pointer;"></a>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

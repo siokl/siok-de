@@ -26,18 +26,37 @@
                 var vTable;
                 var vTr;
                 var vTd;
+
+                if (!rows){
+                    rows = tabRowNum;
+                }else{
+                    tabRowNum = rows;
+                }
+                
+                if (!cols){
+                    cols = tabColNum;
+                }else{
+                    tabColNum = cols;
+                }
+
+                vDiv = document.getElementById("divGame");
+                if(vDiv){
+                    vDiv.remove();
+                }
+
                 vDiv = document.createElement("div");
                 vDiv.setAttribute("id", "divGame");
                 vDiv.setAttribute("align", "center");
-                document.body.appendChild(vDiv);
+                //document.body.appendChild(vDiv);
+                document.getElementById("game").appendChild(vDiv);
                 vTable = document.createElement("table");
-                vTable.setAttribute("id", "game1");
+                vTable.setAttribute("id", "tabGame");
                 vTable.setAttribute("onmousedown", "changeColour(event)");
                 document.getElementById("divGame").appendChild(vTable);
                 for(i = 1; i <= rows; i++){  
                     vTr = document.createElement("tr");
                     vTr.setAttribute("id", "row"+i);
-                    document.getElementById("game1").appendChild(vTr);
+                    document.getElementById("tabGame").appendChild(vTr);
                     for(j = 1; j <= cols; j++){
                         vTr = document.createElement("td");
                         vTr.setAttribute("id", "row"+i+"col"+j);
@@ -63,6 +82,7 @@
                 }
                 if(allCoulorsSame == true){
                     stopTimer();
+                    startTime = undefined;
                     //document.getElementById("divGame").style.visibility = "hidden";
                     document.getElementById("result").style.visibility = "visible";
                 } else {
@@ -97,12 +117,22 @@
     </head>
     <body>
         <h1 id="timer">timer starts on the first click</h1>
-        <script>
-            initFieldsDyn(tabRowNum, tabColNum);
-        </script>
-        <div style="visibility: hidden;" id="result" align="center">
-            <img src="img/ajax_you_did_it.jpg">
-            <h1 id="output" ><a href="game1.html">PLAY AGAIN</a></h1>
+        <div id="input" align="center">
+            <img src="img/rows.png">
+            <input type="number" id="numRows" name="numRows" min="2" max="5" onchange="initFieldsDyn(document.getElementById('numRows').value, document.getElementById('numCols').value)">
+            <img src="img/rows.png">
+            <input type="number" id="numCols" name="numCols" min="2" max="5" onchange="initFieldsDyn(document.getElementById('numRows').value, document.getElementById('numCols').value)">
+        </div>
+        <div id="game">
+            <script>
+                initFieldsDyn(tabRowNum, tabColNum);
+            </script>
+        </div>
+        <div id="result" align="center" style="visibility: hidden;">
+            <div>
+                <img src="img/ajax_rund.jpg" height="50px" width="50px" alt="Avatar" style="border-radius: 50%; margin-right: 10px;">
+                <img src="img/youdidit.png" style="margin-right: 10px;"></div>
+                <a href="game1.html"><img src="img/playagain.png"></a>
         </div>
     </body>
 </html>

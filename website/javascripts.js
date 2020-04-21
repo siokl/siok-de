@@ -13,8 +13,8 @@ var results = [
         "time": 1.5
     }
 ];
-var tabRowNum = 3;
-var tabColNum = 3;
+var tabRowNum = 2;
+var tabColNum = 2;
 var startTime;
 var intervalId;
 var elapsedTime;
@@ -77,6 +77,7 @@ function initFieldsDyn(rows, cols){
         }
     }
     stopTimer();
+    readResultsFromCookie();
 }
 //
 function changeColour(e) {
@@ -102,6 +103,44 @@ function changeColour(e) {
     // Validate result - END
 }
 //
+function setCookie(cookieName,cookieValue,expDays){
+    var expDate;
+    var d = new Date();
+
+    if(!expDays){
+        expDays = 1;
+    }
+    d.setTime(d.getTime() + (expDays*24*60*60*1000));
+    expDate = "expires="+ d.toUTCString();
+    document.cookie = cookieName+"="+cookieValue+ ";" + expDate + ";path=/";;
+}
+//
+function getCookie(cookieName) {
+    var name = cookieName + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  }
+//
+function writeResultsToCookie(){
+    setCookie("results",JSON.stringify(results));
+}
+//
+function readResultsFromCookie(){
+    results = JSON.parse(getCookie("results"));
+    console.log(results);
+
+}
+//
 function validateResult(){
     var fisrstColor;
     var allCoulorsSame = true;
@@ -121,6 +160,7 @@ function validateResult(){
         //document.getElementById("divGame").style.visibility = "hidden";
         document.getElementById("result").style.visibility = "visible";
         addResult(document.getElementById("firstname").value, (elapsedTime / 1000).toFixed(1));
+        writeResultsToCookie();
         displayResults();
         
     } else {
@@ -181,6 +221,11 @@ function decreaseCol(){
         vDiv.appendChild(vH1);
         //alert(resultObj.name+" "+resultObj.time);
     }
+    //
+    vH1 = document.createElement("h1");
+    vH1.innerHTML = "document.cookie= " + decodeURIComponent(document.cookie);
+    vDiv.appendChild(vH1);
+    //
     document.getElementById("results").appendChild(vDiv);
  }
  //
